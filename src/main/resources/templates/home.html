@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Reference Bootstrap files -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+    <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <title>POMODORO-HOME</title>
+</head>
+<body>
+    <section class="home">
+        <div class="container">
+            <h3>Welcome to Pomodoro Online Timer </h3>
+
+            <div class="row">
+                <a class="btn btn-primary" th:href="@{/register}" role="button">Register</a>
+
+                <a class="btn btn-primary" th:href="@{/pomologin}" role="button">Login</a>
+            </div>
+            
+
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Reference Bootstrap files -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+    <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <title>POMODORO-INDEX</title>
+</head>
+<body>
+<section class="home">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Pomodoro</a>
+        </nav>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>TITLE</th>
+                <th>EST POMODOROS</th>
+                <th>NOTE</th>
+                <th>STATUS</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${tasks}">
+                <td th:text="${task.id}"/>
+                <td th:text="${task.title}"/>
+                <td th:text="${task.estPomodoros}"/>
+                <td th:text="${task.note}"/>
+                <div th:switch="${task.status}">
+                    <td th:case="false">Not Completed</td>
+                    <td th:case="true">Completed</td>
+                </div>
+                <td>
+                    <div th:switch="${task.status}">
+                        <div th:case="false">
+                            <a  th:href="@{/pomodoro/startTask(taskId=${task.id})}"
+                                class="btn btn-info btn-sm">
+                                Start
+                            </a>
+                        </div>
+                        <div th:case="true">
+
+                        </div>
+                    </div>
+                    <!-- Add "start task" button/link -->
+<!--                    <a  th:href="@{/pomodoro/startTask(taskId=${task.id})}"-->
+<!--                       class="btn btn-info btn-sm">-->
+<!--                        Start-->
+<!--                    </a>-->
+
+                    <td>
+                    <!-- Add "delete task" button/link -->
+                    <a th:href="@{/pomodoro/removeTask(taskId=${task.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="if (!(confirm('Are you sure you want to delete this Task?'))) return false">
+                        Delete
+                    </a>
+                    </td>
+                </td>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-primary" th:href="@{/pomodoro/createTask}" role="button">Add a Task</a>
+        <a class="btn btn-primary" th:href="@{/pomodoro/}" role="button">Back</a>
+    </div>
+</section>
+</body>
+</html>
