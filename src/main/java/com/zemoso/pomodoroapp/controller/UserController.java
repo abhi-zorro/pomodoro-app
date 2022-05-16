@@ -1,7 +1,10 @@
 package com.zemoso.pomodoroapp.controller;
 
+import com.zemoso.pomodoroapp.dto.UserDto;
 import com.zemoso.pomodoroapp.entity.User;
+import com.zemoso.pomodoroapp.mapservice.MapperService;
 import com.zemoso.pomodoroapp.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,15 +18,15 @@ public class UserController {
 
     private UserService userService;
 
+    @Autowired
+    private MapperService mapperService;
+
     public UserController(UserService userService){
         this.userService = userService;
     }
 
     @GetMapping("/home")
     public String sayHello(Model theModel) {
-
-//        theModel.addAttribute("theDate", new java.util.Date());
-
         return "home";
     }
 
@@ -36,8 +39,9 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") User theUser){
+    public String saveUser(@ModelAttribute("user") UserDto theUserDto){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        User theUser = mapperService.convertToEntity(theUserDto);
         String encodedPassword = passwordEncoder.encode(theUser.getPassword());
         theUser.setPassword(encodedPassword);
         userService.save(theUser);
