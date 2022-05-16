@@ -63,12 +63,20 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<!--		map struct dependency-->
-		<!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
+<!--		add model mapper dependency-->
+
 		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-			<version>1.4.2.Final</version>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.4.5</version>
+		</dependency>
+
+<!--		support for spring boot actuator-->
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-actuator -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-actuator</artifactId>
+			<version>2.6.7</version>
 		</dependency>
 	</dependencies>
 
