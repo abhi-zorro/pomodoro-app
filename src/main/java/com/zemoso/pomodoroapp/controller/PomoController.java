@@ -3,10 +3,13 @@ package com.zemoso.pomodoroapp.controller;
 import com.zemoso.pomodoroapp.dao.PomodoroRepository;
 import com.zemoso.pomodoroapp.dao.TaskRepository;
 import com.zemoso.pomodoroapp.dao.UserRepository;
+import com.zemoso.pomodoroapp.dto.TaskDto;
 import com.zemoso.pomodoroapp.entity.Pomodoro;
 import com.zemoso.pomodoroapp.entity.Task;
 import com.zemoso.pomodoroapp.entity.User;
 import com.zemoso.pomodoroapp.exception.TaskNotFoundException;
+import com.zemoso.pomodoroapp.mapservice.MapperService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,18 +18,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.text.DateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/pomodoro")
+@Slf4j
 public class PomoController {
 
     private User currentUser;
+
+    private static final String REDIRECTURL ="redirect:/pomodoro/viewTasks";
     @Autowired
     private UserRepository userRepository;
 
@@ -36,11 +40,8 @@ public class PomoController {
     @Autowired
     private PomodoroRepository pomodoroRepository;
 
-//    private TaskService taskService;
-//
-//    public PomoController(TaskService taskService){
-//        this.taskService = taskService;
-//    }
+    @Autowired
+    private MapperService mapperService;
 
     @GetMapping("/index")
     public String index(){
@@ -61,17 +62,21 @@ public class PomoController {
     }
 
     @PostMapping("/create")
-    public String createTask(@ModelAttribute("theTask") Task theTask){
-        System.out.println("The task details: " + theTask);
+    public String createTask(@ModelAttribute("theTask") TaskDto theTaskDto){
+        log.info(">>>>> The task details: " + theTaskDto.toString());
+
+        //convert taskdto to task entity
+        Task theTask = mapperService.convertToEntity(theTaskDto);
+        log.info(">>>>> Task details after conversion: " + theTask.toString());
         this.currentUser.addTask(theTask);
         userRepository.save(this.currentUser);
-        return "redirect:/pomodoro/viewTasks";
+        return REDIRECTURL;
     }
 
     @GetMapping("/viewTasks")
     public String showAllTasks(Model theModel){
         List<Task> tasks = taskRepository.findByUserId(this.currentUser.getId());
-        System.out.println("Tasks size: "+tasks.size());
+        log.info(">>>>> Tasks size: "+tasks.size());
         theModel.addAttribute("tasks",tasks);
         return "pomodoro/view-tasks";
     }
@@ -86,18 +91,18 @@ public class PomoController {
         else{
             throw new TaskNotFoundException();
         }
-        System.out.println("Task to be deleted " + task.getTitle() + task.getId());
+        log.info("Task to be deleted " + task.getTitle() + task.getId());
         pomodoroRepository.deleteByTaskId(taskId);
         taskRepository.deleteByTaskId(taskId);
         this.currentUser.deleteTask(task);
         userRepository.save(this.currentUser);
-        return "redirect:/pomodoro/viewTasks";
+        return REDIRECTURL;
     }
 
     @GetMapping("/startTask")
     public String startTask(@RequestParam("taskId") int taskId, Model theModel){
         //get the current time
-        System.out.println("starting time: " + LocalTime.now());
+        log.info(">>>>> starting time: " + LocalTime.now());
 
         //get the task
         Optional<Task> result = taskRepository.findById(taskId);
@@ -110,8 +115,8 @@ public class PomoController {
         }
 
         // check if the task has any pomodoros
-        if(task.getPomodoroList().size()>0){
-            System.out.println("The pomodoros are : " + task.getPomodoroList().toArray());
+        if(!task.getPomodoroList().isEmpty()){
+            log.info(">>>>> The pomodoros are : " + task.getPomodoroList().toArray());
         }
         else {
             Pomodoro pomodoro = new Pomodoro();
@@ -128,12 +133,12 @@ public class PomoController {
 
     @GetMapping("/markComplete")
     public String markAsComplete(@RequestParam("taskId") int taskId, Model theModel){
-        System.out.println("task id: " + taskId + "user id " + this.currentUser.getId() + this.currentUser.getFirstName());
-//        List<Task> totalTasks = taskRepository.findByUserId(this.currentUser.getId());
+        log.info(">>>>> task id: " + taskId + "user id " + this.currentUser.getId() + this.currentUser.getFirstName());
+
         List<Task> totalTasks = this.currentUser.getTaskList();
         Task currentTask=null;
         for(Task task: totalTasks){
-            System.out.println("Task " + task.getId() );
+            log.info(">>>>> Task " + task.getId() );
             if(task.getId()==taskId){
                 currentTask = task;
             }
@@ -141,17 +146,16 @@ public class PomoController {
         if(currentTask == null){
             throw new TaskNotFoundException();
         }
-//        Optional<Task> currentTask = taskRepository.findById(taskId);
+
         List<Pomodoro> pomos = pomodoroRepository.findByTaskId(taskId);
-        System.out.println("Pomos status: " + pomos.get(0).getStatus());
+        log.info(">>>>> Pomos status: " + pomos.get(0).getStatus());
         for(Pomodoro pomo: pomos) {
-            System.out.println("pomo details " + pomo.getId());
+            log.info(">>>>> pomo details " + pomo.getId());
             pomo.setStatus(1);
             pomodoroRepository.save(pomo);
-           // currentTask.addPomodoro(pomo);
         }
         currentTask.setStatus(true);
         taskRepository.save(currentTask);
-        return "redirect:/pomodoro/viewTasks";
+        return REDIRECTURL;
     }
 }
