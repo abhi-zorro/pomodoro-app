@@ -1,8 +1,10 @@
 package com.zemoso.pomodoroapp.entity;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -11,6 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 public class User {
     @Id
     @Column(name = "id")
@@ -34,8 +37,11 @@ public class User {
     private List<Task> taskList;
 
     public void addTask(Task task){
+        log.info(">>>>> INSIDE USER ENTITY: Inside add task method: " + task.toString());
         this.taskList.add(task);
+        log.info(">>>>> INSIDE USER ENTITY: After adding task");
         task.setUser(this);
+        log.info(">>>>> INSIDE USER ENTITY: After setting user");
     }
 
     public void deleteTask(Task task){
