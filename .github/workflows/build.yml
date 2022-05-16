@@ -33,4 +33,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn clean verify sonar:sonar -Dsonar.login=f9b63ee3002b758b0a7ae794e2d1a18baa95bcf0 -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=abhi-zorro  -Dsonar.projectKey=1d8b7e34415a4f6f82c3b58e0c5153dddbc7c0ef
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=abhi-zorro_pomodoro-app
