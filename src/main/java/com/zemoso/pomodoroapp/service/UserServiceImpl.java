@@ -39,17 +39,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-//    @Override
-//    public User findByEmail(String email) {
-//        User user = userRepository.findByEmail(email);
-//        System.out.println("User details" +user.getFirstName() + user.getEmail());
-//
-//        if (user == null) {
-//            throw new UserNotFoundException();
-//        }
-//        return user;
-//    }
-
     @Override
     public void save(User user) {
         userRepository.save(user);
