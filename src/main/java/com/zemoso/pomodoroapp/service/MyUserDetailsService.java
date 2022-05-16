@@ -24,7 +24,7 @@ public class MyUserDetailsService implements UserDetailsService {
             user = userRepository.findByEmail(username);
             log.info("INSIDE loadUserByUsername method >>>>");
             log.info(">>>> email: " + username + "user details: " + user.getEmail());
-            log.info(">>>>> User pwdd: " + user.getPassword());
+            log.info(">>>>> User pwd: " + user.getPassword());
             return new MyUserPrincipal(user);
         }
         catch(NullPointerException ne){
