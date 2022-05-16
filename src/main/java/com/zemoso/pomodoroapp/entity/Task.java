@@ -1,11 +1,8 @@
 package com.zemoso.pomodoroapp.entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
-
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name="task")
@@ -45,12 +42,6 @@ public class Task {
         pomodoro.setTask(this);
     }
 
-//    public void deletePomodoro(Pomodoro pomodoro){
-//        this.pomodoroList.remove(pomodoro);
-//        pomodoro.setTask(null);
-//    }
-
-
     @Override
     public String toString() {
         return "Task{" +
@@ -62,10 +53,5 @@ public class Task {
                 ", user=" + user +
                 ", pomodoroList=" + pomodoroList +
                 '}';
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }
