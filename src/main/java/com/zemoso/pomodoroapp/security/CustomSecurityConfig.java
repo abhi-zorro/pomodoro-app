@@ -20,6 +20,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Override
     @Bean
     public UserDetailsService userDetailsService(){
         return new MyUserDetailsService();
