@@ -1,12 +1,15 @@
 package com.zemoso.pomodoroapp.entity;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+@Slf4j
 public class MyUserPrincipal implements UserDetails {
-    private User user;
+    private transient User user;
 
     public MyUserPrincipal(User user){
         this.user = user;
@@ -14,12 +17,12 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public String getPassword() {
-        System.out.println("User password: " + user.getPassword());
+        log.info("====> User password: " + user.getPassword());
         return user.getPassword();
     }
 
