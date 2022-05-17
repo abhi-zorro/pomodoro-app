@@ -81,7 +81,15 @@
 			<version>2.4.5</version>
 		</dependency>
 
-<!--		support for spring boot actuator-->
+		<!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.8</version>
+		</dependency>
+
+
+		<!--		support for spring boot actuator-->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-actuator -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
